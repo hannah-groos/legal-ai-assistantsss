@@ -1,101 +1,124 @@
-import Image from "next/image";
+import Link from "next/link"
+import { Button } from "../app/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "../app/components/ui/card"
+import { CheckCircle, FileText, MessageSquare, Shield } from "lucide-react"
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gray-950 text-gray-100">
+      <header className="border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
+          <h1 className="text-2xl font-bold">LegalAI Assistant</h1>
+          <nav>
+            <ul className="flex space-x-6">
+              <li><a href="#features" className="hover:text-blue-300 transition-colors">Features</a></li>
+              <li><a href="#benefits" className="hover:text-blue-300 transition-colors">Benefits</a></li>
+              <li><Link href="/contact" className="hover:text-blue-300 transition-colors">Contact</Link></li>
+              <li><Link href="/chat" className="hover:text-blue-300 transition-colors">Chat</Link></li>
+            </ul>
+          </nav>
         </div>
+      </header>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <section className="text-center mb-20">
+          <h2 className="text-5xl font-extrabold mb-6 leading-tight">
+            AI-Powered Legal Research<br />for the Digital Age
+          </h2>
+          <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto">
+            Empower your legal practice with cutting-edge AI technology tailored for GDPR and EU AI Act compliance.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <Button asChild size="lg" className="bg-blue-500 hover:bg-blue-600 text-white">
+              <Link href="/contact">Request a Demo</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="text-blue-300 border-blue-300 hover:bg-blue-300 hover:text-gray-900">
+              <Link href="/chat">Try the Chatbot</Link>
+            </Button>
+          </div>
+        </section>
+
+        <section id="features" className="mb-20">
+          <h3 className="text-3xl font-bold mb-10 text-center">Key Features</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="bg-gray-900 border-gray-800">
+              <CardHeader>
+                <CardTitle className="flex items-center text-xl">
+                  <Shield className="mr-2 text-blue-300" />
+                  GDPR Expertise
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-300">
+                Stay up-to-date with the latest GDPR regulations and interpretations.
+              </CardContent>
+            </Card>
+            <Card className="bg-gray-900 border-gray-800">
+              <CardHeader>
+                <CardTitle className="flex items-center text-xl">
+                  <FileText className="mr-2 text-blue-300" />
+                  EU AI Act Knowledge
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-300">
+                Access comprehensive information on the EU AI Act and its implications.
+              </CardContent>
+            </Card>
+            <Card className="bg-gray-900 border-gray-800">
+              <CardHeader>
+                <CardTitle className="flex items-center text-xl">
+                  <CheckCircle className="mr-2 text-blue-300" />
+                  Case Report Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-300">
+                Quickly analyze relevant case reports, precedents, and judgments.
+              </CardContent>
+            </Card>
+            <Card className="bg-gray-900 border-gray-800">
+              <CardHeader>
+                <CardTitle className="flex items-center text-xl">
+                  <MessageSquare className="mr-2 text-blue-300" />
+                  Context-Aware AI Chat
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-300">
+                Interact with an AI assistant that understands your specific legal context.
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <section id="benefits" className="mb-20">
+          <h3 className="text-3xl font-bold mb-10 text-center">Benefits for Legal Professionals</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
+            <ul className="list-disc list-inside space-y-2">
+              
+              <li>Increase productivity and efficiency in legal research</li>
+              <li>Stay updated with the latest tech law developments in Europe</li>
+              <li>Prepare stronger arguments and advice for clients</li>
+            </ul>
+            <ul className="list-disc list-inside space-y-2">
+              <li>Analyze compliance issues more effectively</li>
+              <li>Access a wealth of relevant legal information at your fingertips</li>
+              <li>Save time on manual research and document analysis</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="text-center">
+          <h3 className="text-3xl font-bold mb-6">Ready to transform your legal practice?</h3>
+          <Button asChild size="lg" className="bg-blue-500 hover:bg-blue-600 text-white">
+            <Link href="/contact">Get Started Today</Link>
+          </Button>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="bg-gray-900 mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center text-gray-300">
+          <p>&copy; 2023 LegalAI Assistant. All rights reserved.</p>
+          <p>Created for the HackTrinity GenAixLaw Hackathon</p>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
