@@ -1,41 +1,61 @@
-"use client";
+"use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
+import Link from "next/link"
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textarea"
-import { PaperclipIcon, SendIcon } from "lucide-react"
+import { PaperclipIcon, SendIcon, XIcon } from "lucide-react"
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([
     { role: "system", content: "Welcome to LegalAI Assistant. How can I help you today?" },
   ])
   const [input, setInput] = useState("")
-  const [file, setFile] = useState(null)
+  const [files, setFiles] = useState<File[]>([])
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleSend = async () => {
-    if (input.trim() === "") return
+    if (input.trim() === "" && files.length === 0) return
 
     const newMessages = [
       ...messages,
-      { role: "user", content: input },
+      { role: "user", content: input, files: files.map(f => f.name) },
     ]
     setMessages(newMessages)
     setInput("")
+    setFiles([])
 
     // TODO: Implement actual API call to Perplexity AI here
     // For now, we'll just simulate a response
     setTimeout(() => {
       setMessages([
         ...newMessages,
-        { role: "system", content: "I'm sorry, I'm just a demo. I can't actually process your request." },
+        { role: "system", content: "I've received your message and files. However, as this is a demo, I can't actually process them. In a real implementation, I would analyze your query and the uploaded documents." },
       ])
     }, 1000)
   }
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0])
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFiles(prevFiles => [...prevFiles, ...Array.from(e.target.files || [])])
+    }
+  }
+
+  const removeFile = (fileName: string) => {
+    setFiles(prevFiles => prevFiles.filter(file => file.name !== fileName))
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSend()
+    }
+  }
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click()
   }
 
   return (
@@ -45,8 +65,8 @@ export default function ChatPage() {
           <h1 className="text-2xl font-bold">LegalAI Assistant</h1>
           <nav>
             <ul className="flex space-x-6">
-              <li><a href="/" className="hover:text-blue-300 transition-colors">Home</a></li>
-              <li><a href="/contact" className="hover:text-blue-300 transition-colors">Contact</a></li>
+              <li><Link href="/" className="hover:text-blue-300 transition-colors">Home</Link></li>
+              <li><Link href="/contact" className="hover:text-blue-300 transition-colors">Contact</Link></li>
             </ul>
           </nav>
         </div>
@@ -64,33 +84,57 @@ export default function ChatPage() {
                   <div key={index} className={`mb-4 ${message.role === "user" ? "text-right" : "text-left"}`}>
                     <span className={`inline-block p-3 rounded-lg ${message.role === "user" ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-100"}`}>
                       {message.content}
+                      {message.files && message.files.length > 0 && (
+                        <div className="mt-2 text-sm">
+                          Attached files: {message.files.join(", ")}
+                        </div>
+                      )}
                     </span>
                   </div>
                 ))}
               </div>
-              <div className="flex space-x-2">
-                <Input
-                  type="file"
-                  onChange={handleFileChange}
-                  className="hidden"
-                  id="file-upload"
-                />
-                <label htmlFor="file-upload" className="cursor-pointer">
-                  <Button variant="outline" size="icon" className="bg-gray-800 border-gray-700 hover:bg-gray-700">
+              <div className="space-y-2">
+                {files.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {files.map((file, index) => (
+                      <div key={index} className="flex items-center bg-gray-800 text-gray-200 text-sm rounded-full px-3 py-1">
+                        <span className="truncate max-w-xs">{file.name}</span>
+                        <button onClick={() => removeFile(file.name)} className="ml-2 text-gray-400 hover:text-gray-200">
+                          <XIcon className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="flex space-x-2">
+                  <Input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    id="file-upload"
+                    multiple
+                    ref={fileInputRef}
+                  />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="bg-gray-800 border-gray-700 hover:bg-gray-700"
+                    onClick={triggerFileInput}
+                  >
                     <PaperclipIcon className="h-4 w-4" />
                   </Button>
-                </label>
-                <Textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Type your message  here..."
-                  className="flex-grow bg-gray-800 border-gray-700 text-white placeholder-gray-400"
-                />
-                <Button onClick={handleSend} className="bg-blue-500 hover:bg-blue-600">
-                  <SendIcon className="h-4 w-4" />
-                </Button>
+                  <Textarea
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Type your message here..."
+                    className="flex-grow bg-gray-800 border-gray-700 text-white placeholder-gray-400"
+                  />
+                  <Button onClick={handleSend} className="bg-blue-500 hover:bg-blue-600">
+                    <SendIcon className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              {file && <p className="mt-2 text-sm text-gray-300">File attached: {file.name}</p>}
             </CardContent>
           </Card>
           <Card className="bg-gray-900 border-gray-800">
@@ -102,7 +146,7 @@ export default function ChatPage() {
                 <li>Type your legal query in the chat box</li>
                 <li>Attach relevant documents using the paperclip icon</li>
                 <li>Click the send button or press Enter to submit</li>
-                <li>The AI will analyze your query and provide a response</li>
+                <li>The AI will analyze your query and attached documents</li>
                 <li>You can ask follow-up questions or start a new topic</li>
               </ol>
               <p className="mt-4 text-sm text-gray-300">
